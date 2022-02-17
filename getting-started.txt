@@ -73,7 +73,7 @@ class Singleton {
      * 
      * @return boolean
      */
-    public function returnStatements() {
+    public function returnStatements($conditionA) {
         // @TODO Fix
         if ($conditionA) {
             echo 'A';
