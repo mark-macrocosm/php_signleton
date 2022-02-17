@@ -19,7 +19,11 @@ class Singleton {
      */
     public function userEcho($name) {
         // @TODO Validate & sanitize $name
-        echo "The value of 'name' is '{$name}'";
+        if (isset($name)) {
+            $name = filter_var($name, FILTER_SANITIZE_STRING);
+            echo "The value of 'name' is '{$name}'";
+        }
+        
     }
     
     /**
@@ -29,7 +33,11 @@ class Singleton {
      */
     public function userQuery($name) {
         // @TODO Validate & sanitize $name
-        mysql_query("SELECT * FROM `test` WHERE `name` = '{$name}' LIMIT 1");
+        if (isset($name)) {
+            $name = filter_var($name, FILTER_SANITIZE_STRING);
+            mysql_query("SELECT * FROM `test` WHERE `name` = '{$name}' LIMIT 1");
+        }
+        
     }
     
     /**
@@ -39,26 +47,24 @@ class Singleton {
      */
     public function userFile($path) {
         // @TODO Validate & sanitize $path
-        readfile($path);
+        if (isset($path)) {
+            $path = filter_var($path, FILTER_SANITIZE_STRING);
+            readfile($path);
+        }
     }
     
     /**
      * Nested conditions
      */
     public function nestedConditions() {
-        // @TODO Untangle nested conditions
-        if ($conditionA) {
-            if ($conditionB) {
-                if ($conditionC) {
-                    echo 'ABC';
-                } else {
-                    echo '^C';
-                }
-            } else {
-                echo '^B';
-            }
-        } else {
+        if ($conditionA && $conditionB && $conditionC) {
+            echo 'ABC';
+        }else if ($conditionA) {
             echo '^A';
+        }else if ($conditionB) {
+            echo '^B';
+        }else if ($conditionC) {
+            echo '^C';
         }
     }
     
@@ -82,10 +88,8 @@ class Singleton {
      */
     public function nullCoalescing() {
         // @TODO Simplify
-        if (isset($_GET['name'])) {
-            $name = $_GET['name'];
-        } elseif (isset($_POST['name'])) {
-            $name = $_POST['name'];
+        if (isset($_REQUEST['name'])) {
+            $name = $_REQUEST['name'];
         } else {
             $name = 'nobody';
         }
@@ -97,6 +101,7 @@ class Singleton {
      */
     public function methodChained() {
         // @TODO Implement method chaining
+        return $this;
     }
     
     /**
@@ -128,7 +133,11 @@ class Singleton {
      */
     public function regexTest($time24Hour) {
         // @TODO Implement RegEx and return type; validate & sanitize input
-        return preg_match('%%', $time24Hour);
+        if (isset($time24Hour)) {
+            $time24Hour = filter_var($time24Hour, FILTER_SANITIZE_STRING);
+            return preg_match('/(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/', $time24Hour);
+        }
+        return false;
     }
     
 }
